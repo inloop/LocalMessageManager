@@ -23,10 +23,10 @@ public class LocalMessageManager implements Callback {
 	private final Handler mHandler;
 
 	@NonNull
-	private final SparseArray<List<Callback>> mListenersSpecific = new SparseArray<>();
+	private final SparseArray<List<LocalMessageCallback>> mListenersSpecific = new SparseArray<>();
 
 	@NonNull
-	private final List<Callback> mListenersUniversal = new ArrayList<>();
+	private final List<LocalMessageCallback> mListenersUniversal = new ArrayList<>();
 
     @NonNull
     public static LocalMessageManager getInstance() {
@@ -195,8 +195,8 @@ public class LocalMessageManager implements Callback {
 	 * @param what ID of message that will be only notified to listener
 	 * @param listener listener
 	 */
-	public synchronized void addListener(int what, @NonNull final Callback listener) {
-		List<Callback> whatListofListeners = mListenersSpecific.get(what);
+	public synchronized void addListener(int what, @NonNull final LocalMessageCallback listener) {
+		List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(what);
 		if (whatListofListeners == null) {
 			whatListofListeners = new ArrayList<>();
 			mListenersSpecific.put(what, whatListofListeners);
@@ -213,7 +213,7 @@ public class LocalMessageManager implements Callback {
 	 *
 	 * @param listener listener
 	 */
-	public synchronized void addListener(@NonNull final Callback listener) {
+	public synchronized void addListener(@NonNull final LocalMessageCallback listener) {
 		if (!mListenersUniversal.contains(listener)) {
 			mListenersUniversal.add(listener);
 		}
@@ -225,8 +225,8 @@ public class LocalMessageManager implements Callback {
 	 * @param what The id of the message to stop listening to.
 	 * @param listener The listener to remove.
 	 */
-	public synchronized void removeListener(int what, @NonNull final Callback listener) {
-		final List<Callback> whatListofListeners = mListenersSpecific.get(what);
+	public synchronized void removeListener(int what, @NonNull final LocalMessageCallback listener) {
+		final List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(what);
 		if (whatListofListeners == null) {
 			return;
 		}
@@ -240,7 +240,7 @@ public class LocalMessageManager implements Callback {
 	 *
 	 * @param listener The listener to remove.
 	 */
-	public synchronized void removeListener(@NonNull final Callback listener) {
+	public synchronized void removeListener(@NonNull final LocalMessageCallback listener) {
 		if (mListenersUniversal.contains(listener)) {
 			mListenersUniversal.remove(listener);
 		}
@@ -265,13 +265,13 @@ public class LocalMessageManager implements Callback {
 	public boolean handleMessage(@NonNull final Message msg) {
 		// proces listeners for specified type of message what
 		synchronized (mListenersSpecific) {
-			final List<Callback> whatListofListeners = mListenersSpecific.get(msg.what);
+			final List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(msg.what);
 			if (whatListofListeners != null) {
 				if (whatListofListeners.size() == 0) {
 					mListenersSpecific.remove(msg.what);
 				} else {
-                    for (final Callback callback : whatListofListeners) {
-                        callback.handleMessage(msg);
+                    for (final LocalMessageCallback callback : whatListofListeners) {
+                        callback.handleMessage(new LocalMessage(msg));
                     }
                 }
 			}
@@ -279,8 +279,8 @@ public class LocalMessageManager implements Callback {
 
 		// process universal listeners
         synchronized (mListenersUniversal) {
-            for (final Callback callback : mListenersUniversal) {
-                callback.handleMessage(msg);
+            for (final LocalMessageCallback callback : mListenersUniversal) {
+                callback.handleMessage(new LocalMessage(msg));
             }
         }
 		return true;

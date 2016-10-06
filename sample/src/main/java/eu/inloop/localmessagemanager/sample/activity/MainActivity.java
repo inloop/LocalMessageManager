@@ -3,15 +3,18 @@ package eu.inloop.localmessagemanager.sample.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import eu.inloop.localmessagemanager.LocalMessage;
+import eu.inloop.localmessagemanager.LocalMessageCallback;
 import eu.inloop.localmessagemanager.LocalMessageManager;
 import eu.inloop.localmessagemanager.sample.MyCustomObject;
 import eu.inloop.localmessagemanager.sample.R;
 
 
-public class MainActivity extends AppCompatActivity implements Handler.Callback {
+public class MainActivity extends AppCompatActivity implements LocalMessageCallback {
 
     private TextView mTextView;
 
@@ -41,17 +44,16 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback 
     }
 
     @Override
-    public boolean handleMessage(final Message msg) {
-        switch (msg.what) {
+    public void handleMessage(@NonNull final LocalMessage msg) {
+        switch (msg.getId()) {
             case R.id.msg_sample_event : {
                 mTextView.setText("Received simple event (" + System.currentTimeMillis() / 100 + ")");
             }
             break;
             case R.id.msg_custom_payload_event : {
-                mTextView.setText("Received custom object (" + ((MyCustomObject)msg.obj).getSomeValue() + ")");
+                mTextView.setText("Received custom object (" + ((MyCustomObject)msg.getObject()).getSomeValue() + ")");
             }
         }
-        return false;
     }
 
     /*
