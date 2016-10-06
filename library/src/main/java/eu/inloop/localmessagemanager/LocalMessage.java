@@ -69,7 +69,7 @@ public class LocalMessage {
     }
 
     private void checkIfMainThread() {
-        if (BuildConfig.DEBUG && Looper.myLooper() != Looper.getMainLooper()) {
+        if (null == mMessage) {
             throw new IllegalStateException("You can't use LocalMessage instance from a non-UI thread. " +
                     "Extract the data from LocalMessage and don't hold a reference to it outside of handleMessage()");
         }

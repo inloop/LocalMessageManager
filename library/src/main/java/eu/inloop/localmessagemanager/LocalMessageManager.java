@@ -177,6 +177,9 @@ public class LocalMessageManager implements Callback {
                 callback.handleMessage(mMessage);
             }
         }
+
+        mMessage.setMessage(null);
+
         return true;
     }
 

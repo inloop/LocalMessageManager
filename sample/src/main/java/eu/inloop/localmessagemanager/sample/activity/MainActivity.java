@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements LocalMessageCallb
 
     @Override
     public void handleMessage(@NonNull final LocalMessage msg) {
-
         switch (msg.getId()) {
             case R.id.msg_sample_event : {
                 mTextView.setText("Received simple event (" + System.currentTimeMillis() / 100 + ")");
