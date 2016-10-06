@@ -2,7 +2,11 @@ package eu.inloop.localmessagemanager;
 
 import android.support.annotation.NonNull;
 
-@SuppressWarnings("UnnecessaryInterfaceModifier")
 public interface LocalMessageCallback {
-    public void handleMessage(@NonNull LocalMessage localMessage);
+
+    /**
+     * This method is always executed from the UI thread.
+     * @param localMessage event message
+     */
+    void handleMessage(@NonNull LocalMessage localMessage);
 }

@@ -47,40 +47,66 @@ public class LocalMessageManager implements Callback {
     }
 
     /**
-     * Sends a Message containing only the what value.
-     * @param what - message ID
+     * Sends an empty Message containing only the message ID.
+     * @param id - message ID
      */
-    public final void sendEmptyMessage(final int what) {
-        mHandler.sendEmptyMessage(what);
-    }
-
-    public final void sendMessage(final int what, @NonNull final Object payload) {
-        mHandler.sendMessage(mHandler.obtainMessage(what, payload));
-    }
-
-    public final void sendMessage(final int what, final int arg1) {
-        mHandler.sendMessage(mHandler.obtainMessage(what, arg1));
-    }
-
-    public final void sendMessage(final int what, final int arg1, final int arg2) {
-        mHandler.sendMessage(mHandler.obtainMessage(what, arg1, arg2));
-    }
-
-    public final void sendMessage(final int what, @NonNull final Bundle bundle) {
-        mHandler.sendMessage(mHandler.obtainMessage(what, bundle));
+    public final void sendEmptyMessage(final int id) {
+        mHandler.sendEmptyMessage(id);
     }
 
     /**
-     * Add listener for specific type of message by its {@link Message#what}.
+     * Sends a Message containing the ID and an arbitrary Object.
+     * @param id - message ID
+     * @param payload - arbitrary object
+     */
+    public final void sendMessage(final int id, @NonNull final Object payload) {
+        mHandler.sendMessage(mHandler.obtainMessage(id, payload));
+    }
+
+    /**
+     * Sends a Message containing the ID and one integer argument.
+     * More effective than sending an arbitrary object.
+     * @param id - message ID
+     * @param arg1 - integer argument
+     */
+    public final void sendMessage(final int id, final int arg1) {
+        mHandler.sendMessage(mHandler.obtainMessage(id, arg1));
+    }
+
+    /**
+     * Sends a Message containing the ID and two integer arguments.
+     * More effective than sending an arbitrary object.
+     * @param id - message ID
+     * @param arg1 - integer argument
+     * @param arg2 - integer argument
+     */
+    public final void sendMessage(final int id, final int arg1, final int arg2) {
+        mHandler.sendMessage(mHandler.obtainMessage(id, arg1, arg2));
+    }
+
+    /**
+     * Sends a Message containing the ID and a Bundle object.
+     * More effective than sending an arbitrary object.
+     * @param id - message ID
+     * @param bundle - bundle
+     */
+    public final void sendMessage(final int id, @NonNull final Bundle bundle) {
+        mHandler.sendMessage(mHandler.obtainMessage(id, bundle));
+    }
+
+    /**
+     * Add listener for specific type of message by its ID.
+     * Don't forget to call {@link #removeListener(LocalMessageCallback)} or
+     * {@link #removeListeners(int)}
      *
-     * @param what     ID of message that will be only notified to listener
+     * @param id     ID of message that will be only notified to listener
      * @param listener listener
      */
-    public synchronized void addListener(int what, @NonNull final LocalMessageCallback listener) {
-        List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(what);
+    public synchronized void addListener(int id, @NonNull final LocalMessageCallback listener) {
+        List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(id);
         if (whatListofListeners == null) {
             whatListofListeners = new ArrayList<>();
-            mListenersSpecific.put(what, whatListofListeners);
+            mListenersSpecific.put(id, whatListofListeners);
         }
         if (!whatListofListeners.contains(listener)) {
             whatListofListeners.add(listener);
@@ -89,8 +115,6 @@ public class LocalMessageManager implements Callback {
 
     /**
      * Add listener for all messages.
-     * <p>
-     * <p>Warning: Listener is referenced via weak reference, do not use annonymous class!<p/>
      *
      * @param listener listener
      */
@@ -114,10 +138,10 @@ public class LocalMessageManager implements Callback {
     /**
      * Remove all listeners for desired message ID.
      *
-     * @param what The id of the message to stop listening to.
+     * @param id The id of the message to stop listening to.
      */
-    public synchronized void removeListeners(final int what) {
-        mListenersSpecific.delete(what);
+    public synchronized void removeListeners(final int id) {
+        mListenersSpecific.delete(id);
     }
 
     /*

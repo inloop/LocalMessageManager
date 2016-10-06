@@ -1,8 +1,6 @@
 package eu.inloop.localmessagemanager.sample.activity;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -12,7 +10,6 @@ import eu.inloop.localmessagemanager.LocalMessageCallback;
 import eu.inloop.localmessagemanager.LocalMessageManager;
 import eu.inloop.localmessagemanager.sample.MyCustomObject;
 import eu.inloop.localmessagemanager.sample.R;
-
 
 public class MainActivity extends AppCompatActivity implements LocalMessageCallback {
 
@@ -33,10 +30,10 @@ public class MainActivity extends AppCompatActivity implements LocalMessageCallb
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LocalMessageManager.getInstance().addListener(this);
+        LocalMessageManager.getInstance().removeListener(this);
 
         // You can also listen to a specific message
-        // LocalMessageManager.getInstance().addListener(R.id.msg_sample_event, mSimpleMessageListener);
+        // LocalMessageManager.getInstance().removeListener(R.id.msg_sample_event, mSimpleMessageListener);
     }
 
     @Override
