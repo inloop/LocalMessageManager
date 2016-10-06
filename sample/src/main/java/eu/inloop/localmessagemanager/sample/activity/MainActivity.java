@@ -23,24 +23,20 @@ public class MainActivity extends AppCompatActivity implements LocalMessageCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mTextView = (TextView) findViewById(android.R.id.text1);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+
         LocalMessageManager.getInstance().addListener(this);
-
         // You can also listen to a specific message
         // LocalMessageManager.getInstance().addListener(R.id.msg_sample_event, mSimpleMessageListener);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        LocalMessageManager.getInstance().removeListener(this);
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalMessageManager.getInstance().addListener(this);
 
         // You can also listen to a specific message
-        // LocalMessageManager.getInstance().removeListener(mSimpleMessageListener);
+        // LocalMessageManager.getInstance().addListener(R.id.msg_sample_event, mSimpleMessageListener);
     }
 
     @Override
