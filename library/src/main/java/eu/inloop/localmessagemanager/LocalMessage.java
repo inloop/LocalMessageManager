@@ -1,6 +1,7 @@
 package eu.inloop.localmessagemanager;
 
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,11 +9,15 @@ import android.support.annotation.Nullable;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class LocalMessage {
 
-    @NonNull
-    private final Message mMessage;
+    @Nullable
+    private Message mMessage;
 
-    LocalMessage(@NonNull final Message message) {
+    LocalMessage(@Nullable final Message message) {
         this.mMessage = message;
+    }
+
+    void setMessage(@Nullable final Message message) {
+        mMessage = message;
     }
 
     /**
@@ -20,6 +25,7 @@ public class LocalMessage {
      * what this message is about.
      */
     public int getId() {
+        checkIfMainThread();
         return mMessage.what;
     }
 
@@ -29,6 +35,7 @@ public class LocalMessage {
      * few integer values.
      */
     public int getArg1() {
+        checkIfMainThread();
         return mMessage.arg1;
     }
 
@@ -38,6 +45,7 @@ public class LocalMessage {
      * few integer values.
      */
     public int getArg2() {
+        checkIfMainThread();
         return mMessage.arg1;
     }
 
@@ -46,6 +54,7 @@ public class LocalMessage {
      */
     @Nullable
     public Object getObject() {
+        checkIfMainThread();
         return mMessage.obj;
     }
 
@@ -55,11 +64,20 @@ public class LocalMessage {
      */
     @NonNull
     public Bundle getData() {
+        checkIfMainThread();
         return mMessage.getData();
+    }
+
+    private void checkIfMainThread() {
+        if (BuildConfig.DEBUG && Looper.myLooper() != Looper.getMainLooper()) {
+            throw new IllegalStateException("You can't use LocalMessage instance from a non-UI thread. " +
+                    "Extract the data from LocalMessage and don't hold a reference to it outside of handleMessage()");
+        }
     }
 
     @Override
     public String toString() {
+        checkIfMainThread();
         final StringBuilder b = new StringBuilder();
         b.append("{ when=");
         b.append(" id=");

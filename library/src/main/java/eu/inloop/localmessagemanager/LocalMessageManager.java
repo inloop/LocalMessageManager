@@ -24,10 +24,13 @@ public class LocalMessageManager implements Callback {
     private final Handler mHandler;
 
     @NonNull
-    private final SparseArray<List<LocalMessageCallback>> mListenersSpecific = new SparseArray<>();
+    private final SparseArray<List<LocalMessageCallback>> mListenersSpecific;
 
     @NonNull
-    private final List<LocalMessageCallback> mListenersUniversal = new ArrayList<>();
+    private final List<LocalMessageCallback> mListenersUniversal;
+
+    @NonNull
+    private LocalMessage mMessage;
 
     @NonNull
     public static LocalMessageManager getInstance() {
@@ -44,6 +47,9 @@ public class LocalMessageManager implements Callback {
 
     private LocalMessageManager() {
         mHandler = new Handler(Looper.getMainLooper(), this);
+        mMessage = new LocalMessage(null);
+        mListenersUniversal = new ArrayList<>();
+        mListenersSpecific = new SparseArray<>();
     }
 
     /**
@@ -150,6 +156,7 @@ public class LocalMessageManager implements Callback {
      */
     @Override
     public boolean handleMessage(@NonNull final Message msg) {
+        mMessage.setMessage(msg);
         // proces listeners for specified type of message what
         synchronized (mListenersSpecific) {
             final List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(msg.what);
@@ -158,7 +165,7 @@ public class LocalMessageManager implements Callback {
                     mListenersSpecific.remove(msg.what);
                 } else {
                     for (final LocalMessageCallback callback : whatListofListeners) {
-                        callback.handleMessage(new LocalMessage(msg));
+                        callback.handleMessage(mMessage);
                     }
                 }
             }
@@ -167,7 +174,7 @@ public class LocalMessageManager implements Callback {
         // process universal listeners
         synchronized (mListenersUniversal) {
             for (final LocalMessageCallback callback : mListenersUniversal) {
-                callback.handleMessage(new LocalMessage(msg));
+                callback.handleMessage(mMessage);
             }
         }
         return true;
