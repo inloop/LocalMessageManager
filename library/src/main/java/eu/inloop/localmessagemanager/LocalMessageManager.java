@@ -1,5 +1,6 @@
 package eu.inloop.localmessagemanager;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Looper;
@@ -45,140 +46,25 @@ public class LocalMessageManager implements Callback {
 		mHandler = new Handler(Looper.getMainLooper(), this);
 	}
 
-	/**
-	 * @see android.os.Handler#sendMessage(android.os.Message)
-	 */
-	public final boolean sendMessage(@NonNull final Message msg) {
-		return mHandler.sendMessage(msg);
-	}
+    public final boolean sendEmptyMessage(final int what) {
+        return mHandler.sendEmptyMessage(what);
+    }
 
-    /**
-     * @see android.os.Handler#sendMessage(android.os.Message)
-     */
     public final boolean sendMessage(final int what, @NonNull final Object payload) {
         return mHandler.sendMessage(mHandler.obtainMessage(what, payload));
     }
 
-    /**
-	 * @see android.os.Handler#sendEmptyMessage(int)
-	 */
-	public final boolean sendEmptyMessage(final int what) {
-		return mHandler.sendEmptyMessage(what);
-	}
+    public final boolean sendMessage(final int what, final int arg1) {
+        return mHandler.sendMessage(mHandler.obtainMessage(what, arg1));
+    }
 
-	/**
-	 * @see android.os.Handler#sendEmptyMessageDelayed(int, long)
-	 */
-	public final boolean sendEmptyMessageDelayed(final int what, final long delayMillis) {
-		return mHandler.sendEmptyMessageDelayed(what, delayMillis);
-	}
+    public final boolean sendMessage(final int what, final int arg1, final int arg2) {
+        return mHandler.sendMessage(mHandler.obtainMessage(what, arg1, arg2));
+    }
 
-	/**
-	 * @see android.os.Handler#sendEmptyMessageAtTime(int, long)
-	 */
-	public final boolean sendEmptyMessageAtTime(final int what, final long uptimeMillis) {
-		return mHandler.sendEmptyMessageAtTime(what, uptimeMillis);
-	}
-
-	/**
-	 * @see android.os.Handler#sendMessageDelayed(android.os.Message, long)
-	 */
-	public final boolean sendMessageDelayed(@NonNull final Message msg, final long delayMillis) {
-		return mHandler.sendMessageDelayed(msg, delayMillis);
-	}
-
-	/**
-	 * @see android.os.Handler#sendMessageAtTime(android.os.Message, long)
-	 */
-	public boolean sendMessageAtTime(@NonNull final Message msg, long uptimeMillis) {
-		return mHandler.sendMessageAtTime(msg, uptimeMillis);
-	}
-
-	/**
-	 * @see android.os.Handler#sendMessageAtFrontOfQueue(android.os.Message)
-	 */
-	public final boolean sendMessageAtFrontOfQueue(@NonNull final Message msg) {
-		return mHandler.sendMessageAtFrontOfQueue(msg);
-	}
-
-	/**
-	 * @see android.os.Handler#removeMessages(int)
-	 */
-	public final void removeMessages(final int what) {
-		mHandler.removeMessages(what);
-	}
-
-	/**
-	 * @see android.os.Handler#removeMessages(int, java.lang.Object)
-	 */
-	public final void removeMessages(final int what,final Object object) {
-		mHandler.removeMessages(what, object);
-	}
-
-	/**
-	 * Returns a new {@link android.os.Message Message} from the global message pool. More efficient than
-	 * creating and allocating new instances. The retrieved message has its handler set to this instance (Message.target == this).
-	 *  If you don't want that facility, just call Message.obtain() instead.
-	 */
-    @SuppressWarnings("WeakerAccess")
-    @NonNull
-	public Message obtainMessage() {
-		return mHandler.obtainMessage();
-	}
-
-	/**
-	 * Same as {@link #obtainMessage()}, except that it also sets the what member of the returned Message.
-	 *
-	 * @param what Value to assign to the returned Message.what field.
-	 * @return A Message from the global message pool.
-	 */
-    @NonNull
-	public Message obtainMessage(final int what) {
-		return mHandler.obtainMessage(what);
-	}
-
-	/**
-	 *
-	 * Same as {@link #obtainMessage()}, except that it also sets the what and obj members
-	 * of the returned Message.
-	 *
-	 * @param what Value to assign to the returned Message.what field.
-	 * @param obj Value to assign to the returned Message.obj field.
-	 * @return A Message from the global message pool.
-	 */
-    @NonNull
-	public Message obtainMessage(final int what, final Object obj) {
-		return mHandler.obtainMessage(what, obj);
-	}
-
-	/**
-	 *
-	 * Same as {@link #obtainMessage()}, except that it also sets the what, arg1 and arg2 members of the returned
-	 * Message.
-	 * @param what Value to assign to the returned Message.what field.
-	 * @param arg1 Value to assign to the returned Message.arg1 field.
-	 * @param arg2 Value to assign to the returned Message.arg2 field.
-	 * @return A Message from the global message pool.
-	 */
-    @NonNull
-	public Message obtainMessage(final int what, final int arg1, final int arg2) {
-		return mHandler.obtainMessage(what, arg1, arg2);
-	}
-
-	/**
-	 *
-	 * Same as {@link #obtainMessage()}, except that it also sets the what, obj, arg1,and arg2 values on the
-	 * returned Message.
-	 * @param what Value to assign to the returned Message.what field.
-	 * @param arg1 Value to assign to the returned Message.arg1 field.
-	 * @param arg2 Value to assign to the returned Message.arg2 field.
-	 * @param obj Value to assign to the returned Message.obj field.
-	 * @return A Message from the global message pool.
-	 */
-    @NonNull
-	public Message obtainMessage(final int what, final int arg1, final int arg2, final Object obj) {
-		return mHandler.obtainMessage(what, arg1, arg2, obj);
-	}
+    public final boolean sendMessage(final int what, @NonNull final Bundle bundle) {
+        return mHandler.sendMessage(mHandler.obtainMessage(what, bundle));
+    }
 
     @NonNull
 	public Handler getHandler() {
