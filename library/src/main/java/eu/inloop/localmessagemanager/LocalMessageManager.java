@@ -70,7 +70,7 @@ public class LocalMessageManager implements Callback {
      * Sends an empty Message containing only the message ID.
      * @param id - message ID
      */
-    public final void sendEmptyMessage(final int id) {
+    public final void send(final int id) {
         mHandler.sendEmptyMessage(id);
     }
 
@@ -79,7 +79,7 @@ public class LocalMessageManager implements Callback {
      * @param id - message ID
      * @param payload - arbitrary object
      */
-    public final void sendMessage(final int id, @NonNull final Object payload) {
+    public final void send(final int id, @NonNull final Object payload) {
         mHandler.sendMessage(mHandler.obtainMessage(id, payload));
     }
 
@@ -89,7 +89,7 @@ public class LocalMessageManager implements Callback {
      * @param id - message ID
      * @param arg1 - integer argument
      */
-    public final void sendMessage(final int id, final int arg1) {
+    public final void send(final int id, final int arg1) {
         mHandler.sendMessage(mHandler.obtainMessage(id, arg1, 0));
     }
 
@@ -100,7 +100,7 @@ public class LocalMessageManager implements Callback {
      * @param arg1 - integer argument
      * @param arg2 - integer argument
      */
-    public final void sendMessage(final int id, final int arg1, final int arg2) {
+    public final void send(final int id, final int arg1, final int arg2) {
         mHandler.sendMessage(mHandler.obtainMessage(id, arg1, arg2));
     }
 
@@ -110,7 +110,7 @@ public class LocalMessageManager implements Callback {
      * @param id - message ID
      * @param bundle - bundle
      */
-    public final void sendMessage(final int id, @NonNull final Bundle bundle) {
+    public final void send(final int id, @NonNull final Bundle bundle) {
         mHandler.sendMessage(mHandler.obtainMessage(id, bundle));
     }
 

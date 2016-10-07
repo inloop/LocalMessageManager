@@ -27,14 +27,14 @@ public class TestFragment extends Fragment {
         view.findViewById(R.id.btn_fire).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalMessageManager.getInstance().sendEmptyMessage(R.id.msg_sample_event);
+                LocalMessageManager.getInstance().send(R.id.msg_sample_event);
             }
         });
 
         view.findViewById(R.id.btn_fire_custom).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocalMessageManager.getInstance().sendMessage(R.id.msg_custom_payload_event, new MyCustomObject());
+                LocalMessageManager.getInstance().send(R.id.msg_custom_payload_event, new MyCustomObject());
             }
         });
     }
