@@ -79,8 +79,7 @@ public class LocalMessage {
     public String toString() {
         checkIfMainThread();
         final StringBuilder b = new StringBuilder();
-        b.append("{ when=");
-        b.append(" id=");
+        b.append("{ id=");
         b.append(getId());
 
         if (getArg1() != 0) {
@@ -98,7 +97,7 @@ public class LocalMessage {
             b.append(getObject());
         }
 
-        if (getData() != null) {
+        if (getData().size() > 0) {
             b.append(" data=");
             b.append(getData());
         }

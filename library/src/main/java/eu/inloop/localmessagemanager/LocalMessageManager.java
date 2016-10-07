@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.AnyThread;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -16,6 +17,11 @@ import java.util.List;
 @SuppressWarnings({"WeakerAccess", "unused"})
 @AnyThread
 public class LocalMessageManager implements Callback {
+
+    @NonNull
+    private static final String TAG = "LocalMessageManager";
+
+    private static boolean DEBUG = false;
 
     @Nullable
     private static volatile LocalMessageManager sInstance = null;
@@ -50,6 +56,14 @@ public class LocalMessageManager implements Callback {
         mMessage = new LocalMessage(null);
         mListenersUniversal = new ArrayList<>();
         mListenersSpecific = new SparseArray<>();
+    }
+
+    /**
+     * Enable debug logging (such as confirmation of delivery, number of listeners etc.)
+     * @param debug - false by default
+     */
+    public static void setDebug(final boolean debug) {
+        DEBUG = debug;
     }
 
     /**
@@ -127,6 +141,10 @@ public class LocalMessageManager implements Callback {
     public synchronized void addListener(@NonNull final LocalMessageCallback listener) {
         if (!mListenersUniversal.contains(listener)) {
             mListenersUniversal.add(listener);
+        } else {
+            if (DEBUG) {
+                Log.w(TAG, "Listener is already added. " + listener.toString());
+            }
         }
     }
 
@@ -138,6 +156,10 @@ public class LocalMessageManager implements Callback {
     public synchronized void removeListener(@NonNull final LocalMessageCallback listener) {
         if (mListenersUniversal.contains(listener)) {
             mListenersUniversal.remove(listener);
+        } else {
+            if (DEBUG) {
+                Log.w(TAG, "Trying to remove a listener that is not registered. " + listener.toString());
+            }
         }
     }
 
@@ -147,6 +169,13 @@ public class LocalMessageManager implements Callback {
      * @param id The id of the message to stop listening to.
      */
     public synchronized void removeListeners(final int id) {
+        if (DEBUG) {
+            List<LocalMessageCallback> callbacks = mListenersSpecific.get(id);
+            if (callbacks == null || callbacks.size() == 0) {
+                Log.w(TAG, "Trying to remove specific listeners that are not registerred. ID " + id);
+            }
+        }
+
         mListenersSpecific.delete(id);
     }
 
@@ -157,6 +186,11 @@ public class LocalMessageManager implements Callback {
     @Override
     public boolean handleMessage(@NonNull final Message msg) {
         mMessage.setMessage(msg);
+
+        if (DEBUG) {
+            logMessageHandling(mMessage);
+        }
+
         // proces listeners for specified type of message what
         synchronized (mListenersSpecific) {
             final List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(msg.what);
@@ -181,6 +215,52 @@ public class LocalMessageManager implements Callback {
         mMessage.setMessage(null);
 
         return true;
+    }
+
+    private void logMessageHandling(@NonNull final LocalMessage msg) {
+
+        final List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(msg.getId());
+
+        if ((whatListofListeners == null || whatListofListeners.size() == 0) && mListenersUniversal.size() == 0) {
+            Log.w(TAG, "Delivering FAILED for message ID " + msg.getId() + ". No listeners. " + msg.toString());
+        } else {
+            final StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Delivering message ID ");
+            stringBuilder.append(msg.getId());
+            stringBuilder.append(", Specific listeners: ");
+            if (whatListofListeners == null || whatListofListeners.size() == 0) {
+                stringBuilder.append(0);
+            } else {
+                stringBuilder.append(whatListofListeners.size());
+                stringBuilder.append(" [");
+                for (int i = 0; i < whatListofListeners.size(); i++) {
+                    stringBuilder.append(whatListofListeners.get(i).getClass().getSimpleName());
+                    if (i < whatListofListeners.size() - 1) {
+                        stringBuilder.append(",");
+                    }
+                }
+                stringBuilder.append("]");
+            }
+
+            stringBuilder.append(", Universal listeners: ");
+            if (mListenersUniversal.size() == 0) {
+                stringBuilder.append(0);
+            } else {
+                stringBuilder.append(mListenersUniversal.size());
+                stringBuilder.append(" [");
+                for (int i = 0; i < mListenersUniversal.size(); i++) {
+                    stringBuilder.append(mListenersUniversal.get(i).getClass().getSimpleName());
+                    if (i < mListenersUniversal.size() - 1) {
+                        stringBuilder.append(",");
+                    }
+                }
+                stringBuilder.append("], Message: ");
+            }
+
+            stringBuilder.append(msg.toString());
+
+            Log.v(TAG, stringBuilder.toString());
+        }
     }
 
 }
