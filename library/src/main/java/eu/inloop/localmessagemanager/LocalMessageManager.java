@@ -122,14 +122,16 @@ public class LocalMessageManager implements Callback {
      * @param id     ID of message that will be only notified to listener
      * @param listener listener
      */
-    public synchronized void addListener(int id, @NonNull final LocalMessageCallback listener) {
-        List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(id);
-        if (whatListofListeners == null) {
-            whatListofListeners = new ArrayList<>();
-            mListenersSpecific.put(id, whatListofListeners);
-        }
-        if (!whatListofListeners.contains(listener)) {
-            whatListofListeners.add(listener);
+    public void addListener(int id, @NonNull final LocalMessageCallback listener) {
+        synchronized (mListenersSpecific) {
+            List<LocalMessageCallback> whatListofListeners = mListenersSpecific.get(id);
+            if (whatListofListeners == null) {
+                whatListofListeners = new ArrayList<>();
+                mListenersSpecific.put(id, whatListofListeners);
+            }
+            if (!whatListofListeners.contains(listener)) {
+                whatListofListeners.add(listener);
+            }
         }
     }
 
@@ -138,12 +140,14 @@ public class LocalMessageManager implements Callback {
      *
      * @param listener listener
      */
-    public synchronized void addListener(@NonNull final LocalMessageCallback listener) {
-        if (!mListenersUniversal.contains(listener)) {
-            mListenersUniversal.add(listener);
-        } else {
-            if (DEBUG) {
-                Log.w(TAG, "Listener is already added. " + listener.toString());
+    public void addListener(@NonNull final LocalMessageCallback listener) {
+        synchronized (mListenersUniversal) {
+            if (!mListenersUniversal.contains(listener)) {
+                mListenersUniversal.add(listener);
+            } else {
+                if (DEBUG) {
+                    Log.w(TAG, "Listener is already added. " + listener.toString());
+                }
             }
         }
     }
@@ -154,11 +158,13 @@ public class LocalMessageManager implements Callback {
      * @param listener The listener to remove.
      */
     public synchronized void removeListener(@NonNull final LocalMessageCallback listener) {
-        if (mListenersUniversal.contains(listener)) {
-            mListenersUniversal.remove(listener);
-        } else {
-            if (DEBUG) {
-                Log.w(TAG, "Trying to remove a listener that is not registered. " + listener.toString());
+        synchronized (mListenersUniversal) {
+            if (mListenersUniversal.contains(listener)) {
+                mListenersUniversal.remove(listener);
+            } else {
+                if (DEBUG) {
+                    Log.w(TAG, "Trying to remove a listener that is not registered. " + listener.toString());
+                }
             }
         }
     }
@@ -243,20 +249,21 @@ public class LocalMessageManager implements Callback {
             }
 
             stringBuilder.append(", Universal listeners: ");
-            if (mListenersUniversal.size() == 0) {
-                stringBuilder.append(0);
-            } else {
-                stringBuilder.append(mListenersUniversal.size());
-                stringBuilder.append(" [");
-                for (int i = 0; i < mListenersUniversal.size(); i++) {
-                    stringBuilder.append(mListenersUniversal.get(i).getClass().getSimpleName());
-                    if (i < mListenersUniversal.size() - 1) {
-                        stringBuilder.append(",");
+            synchronized (mListenersUniversal) {
+                if (mListenersUniversal.size() == 0) {
+                    stringBuilder.append(0);
+                } else {
+                    stringBuilder.append(mListenersUniversal.size());
+                    stringBuilder.append(" [");
+                    for (int i = 0; i < mListenersUniversal.size(); i++) {
+                        stringBuilder.append(mListenersUniversal.get(i).getClass().getSimpleName());
+                        if (i < mListenersUniversal.size() - 1) {
+                            stringBuilder.append(",");
+                        }
                     }
+                    stringBuilder.append("], Message: ");
                 }
-                stringBuilder.append("], Message: ");
             }
-
             stringBuilder.append(msg.toString());
 
             Log.v(TAG, stringBuilder.toString());
