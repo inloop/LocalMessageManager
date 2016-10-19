@@ -1,15 +1,15 @@
 LocalMessageManager
 ================
 
-Used for efficient and simple delivery of messages within you appliation. It's an alternative to [LocalBroadcastManager](https://developer.android.com/reference/android/support/v4/content/LocalBroadcastManager.html).
+Used for efficient and simple delivery of messages within you application. It's an alternative to [LocalBroadcastManager](https://developer.android.com/reference/android/support/v4/content/LocalBroadcastManager.html).
 
 - Simple to use
-- Can send any arbitrary object (doesn't need to be Parceable / Serializable / Bundle')
+- Can send any arbitrary object (doesn't need to be Parceable / Serializable / Bundle)
 - Very efficient - objects are pooled and no new instances are created during delivery
 - Uses standard Android Handler for message delivery
 - Messages are always delivered to the main UI thread
 - No Context needed
-- Ligtweight - just one main class ([LocalMessageManager](https://github.com/inloop/LocalMessageManager/blob/master/library/src/main/java/eu/inloop/localmessagemanager/LocalMessageManager.java))
+- Lightweight - just one main class ([LocalMessageManager](https://github.com/inloop/LocalMessageManager/blob/master/library/src/main/java/eu/inloop/localmessagemanager/LocalMessageManager.java))
 
 
 Comparision with LocalBroadcastManager
@@ -17,7 +17,7 @@ Comparision with LocalBroadcastManager
 - Less complex code (compare with [LocalBroadcastManager source](https://github.com/android/platform_frameworks_support/blob/master/v4/java/android/support/v4/content/LocalBroadcastManager.java))
 - No need to use a Bundle to transfer the data and add unnecessary string keys
 - Doesn't create any new instances, less impact on Garbage Collector 
-- No need to define IntentFilters / Actions.
+- No need to define IntentFilters / Actions
 - Less error prone due to more straighforward API
 
 
