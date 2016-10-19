@@ -1,4 +1,4 @@
-package inloop.eu.localmessagemanager;
+package eu.inloop.localmessagemanager;
 
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
@@ -9,10 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.concurrent.TimeUnit;
-
-import eu.inloop.localmessagemanager.LocalMessage;
-import eu.inloop.localmessagemanager.LocalMessageCallback;
-import eu.inloop.localmessagemanager.LocalMessageManager;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,7 +24,7 @@ public class LMMInstrumentedTest {
     public void singleMessageTest() {
         final int messageIdValid = 1;
         final int messageIdWrong = 2;
-
+        
         mReceivedAllMessages = false;
         LocalMessageManager.getInstance().addListener(new LocalMessageCallback() {
             @Override
@@ -109,5 +105,4 @@ public class LMMInstrumentedTest {
         long ms = TimeUnit.NANOSECONDS.toMillis(nano);
         Log.d(TAG, "Received message(s) after " + nano + " nanoseconds (" + ms + " ms)");
     }
-
 }
