@@ -68,5 +68,5 @@ Download
 
 Grab via Gradle:
 ```groovy
-compile 'eu.inloop:localmessagemanager:0.1.1'
+compile 'eu.inloop:localmessagemanager:0.1.2'
 ```
