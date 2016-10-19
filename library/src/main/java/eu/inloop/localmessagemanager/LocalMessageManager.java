@@ -182,7 +182,9 @@ public class LocalMessageManager implements Callback {
             }
         }
 
-        mListenersSpecific.delete(id);
+        synchronized (mListenersSpecific) {
+            mListenersSpecific.delete(id);
+        }
     }
 
     /*
