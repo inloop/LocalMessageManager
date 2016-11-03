@@ -46,7 +46,7 @@ public class LocalMessage {
      */
     public int getArg2() {
         checkIfMainThread();
-        return mMessage.arg1;
+        return mMessage.arg2;
     }
 
     /**
