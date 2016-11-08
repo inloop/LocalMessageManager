@@ -1,4 +1,7 @@
-## 0.1.3(2016-4-11)
+## 0.1.4(2016-11-8)
+
+- Allow to remove specific listeners for ID ([f4546b7](https://github.com/inloop/LocalMessageManager/commit/f4546b7018db5eb80142f34a29b48fceb0082c09))
+## 0.1.3(2016-11-4)
 
 - getArg2() would return Arg1 ([0bcae12](https://github.com/inloop/LocalMessageManager/commit/0bcae128e3c2d5ca333ccedabda7a6d3c3522698))
 
