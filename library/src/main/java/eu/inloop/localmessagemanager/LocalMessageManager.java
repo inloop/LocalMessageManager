@@ -176,7 +176,7 @@ public class LocalMessageManager implements Callback {
      */
     public synchronized void removeListeners(final int id) {
         if (DEBUG) {
-            List<LocalMessageCallback> callbacks = mListenersSpecific.get(id);
+            final List<LocalMessageCallback> callbacks = mListenersSpecific.get(id);
             if (callbacks == null || callbacks.size() == 0) {
                 Log.w(TAG, "Trying to remove specific listeners that are not registerred. ID " + id);
             }
@@ -184,6 +184,27 @@ public class LocalMessageManager implements Callback {
 
         synchronized (mListenersSpecific) {
             mListenersSpecific.delete(id);
+        }
+    }
+
+    /**
+     * Remove the specific listener for desired message ID.
+     *
+     * @param id The id of the message to stop listening to.
+     * @param listener The listener which should be removed.
+     */
+    public synchronized void removeListener(final int id, @NonNull final LocalMessageCallback listener) {
+        synchronized (mListenersSpecific) {
+            final List<LocalMessageCallback> callbacks = this.mListenersSpecific.get(id);
+            if (callbacks != null && !callbacks.isEmpty()) {
+                if (callbacks.contains(listener)) {
+                    callbacks.remove(listener);
+                }
+            } else {
+                if (DEBUG) {
+                    Log.w(TAG, "Trying to remove specific listener that is not registerred. ID " + id + ", " + listener);
+                }
+            }
         }
     }
 
