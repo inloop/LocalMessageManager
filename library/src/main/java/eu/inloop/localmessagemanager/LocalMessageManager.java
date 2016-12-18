@@ -157,7 +157,7 @@ public class LocalMessageManager implements Callback {
      *
      * @param listener The listener to remove.
      */
-    public synchronized void removeListener(@NonNull final LocalMessageCallback listener) {
+    public void removeListener(@NonNull final LocalMessageCallback listener) {
         synchronized (mListenersUniversal) {
             if (mListenersUniversal.contains(listener)) {
                 mListenersUniversal.remove(listener);
@@ -174,7 +174,7 @@ public class LocalMessageManager implements Callback {
      *
      * @param id The id of the message to stop listening to.
      */
-    public synchronized void removeListeners(final int id) {
+    public void removeListeners(final int id) {
         if (DEBUG) {
             final List<LocalMessageCallback> callbacks = mListenersSpecific.get(id);
             if (callbacks == null || callbacks.size() == 0) {
@@ -193,7 +193,7 @@ public class LocalMessageManager implements Callback {
      * @param id The id of the message to stop listening to.
      * @param listener The listener which should be removed.
      */
-    public synchronized void removeListener(final int id, @NonNull final LocalMessageCallback listener) {
+    public void removeListener(final int id, @NonNull final LocalMessageCallback listener) {
         synchronized (mListenersSpecific) {
             final List<LocalMessageCallback> callbacks = this.mListenersSpecific.get(id);
             if (callbacks != null && !callbacks.isEmpty()) {
