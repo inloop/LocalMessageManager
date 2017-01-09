@@ -1,4 +1,4 @@
-## 0.1.4(2016-12-18)
+## 0.1.5(2016-12-18)
 
 - Remove unncessary synchronized methods ([6c0da78](6c0da78dad4c48628af1fa1cfbcbad8df7b8721f))
 
