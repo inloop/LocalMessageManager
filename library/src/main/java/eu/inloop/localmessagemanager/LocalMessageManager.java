@@ -36,6 +36,9 @@ public class LocalMessageManager implements Callback {
     private final List<LocalMessageCallback> mListenersUniversal;
 
     @NonNull
+    private final List<LocalMessageCallback> mDefensiveCopyList = new ArrayList<>();
+
+    @NonNull
     private LocalMessage mMessage;
 
     @NonNull
@@ -227,7 +230,9 @@ public class LocalMessageManager implements Callback {
                 if (whatListofListeners.size() == 0) {
                     mListenersSpecific.remove(msg.what);
                 } else {
-                    for (final LocalMessageCallback callback : whatListofListeners) {
+                    mDefensiveCopyList.clear();
+                    mDefensiveCopyList.addAll(whatListofListeners);
+                    for (final LocalMessageCallback callback : mDefensiveCopyList) {
                         callback.handleMessage(mMessage);
                     }
                 }
@@ -236,7 +241,9 @@ public class LocalMessageManager implements Callback {
 
         // process universal listeners
         synchronized (mListenersUniversal) {
-            for (final LocalMessageCallback callback : mListenersUniversal) {
+            mDefensiveCopyList.clear();
+            mDefensiveCopyList.addAll(mListenersUniversal);
+            for (final LocalMessageCallback callback : mDefensiveCopyList) {
                 callback.handleMessage(mMessage);
             }
         }

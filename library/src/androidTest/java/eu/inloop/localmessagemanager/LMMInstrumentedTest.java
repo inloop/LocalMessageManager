@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -98,6 +99,35 @@ public class LMMInstrumentedTest {
         SystemClock.sleep(50);
 
         assertEquals("Did not receive all messages!", !mReceivedAllMessages, false);
+    }
+
+    @Test
+    public void concurrentModificationTest() {
+        mReceivedAllMessages = false;
+
+        LocalMessageManager.getInstance().addListener(new LocalMessageCallback() {
+            @Override
+            public void handleMessage(@NonNull LocalMessage localMessage) {
+                mReceivedAllMessages = true;
+
+                //Remove listener
+                LocalMessageManager.getInstance().removeListener(this);
+
+            }
+        });
+
+        LocalMessageCallback localMessageCallback = new LocalMessageCallback() {
+            @Override
+            public void handleMessage(@NonNull LocalMessage localMessage) {
+                // this one should not be delivered
+            }
+        };
+
+        LocalMessageManager.getInstance().addListener(localMessageCallback);
+
+        LocalMessageManager.getInstance().send(1);
+
+        SystemClock.sleep(50);
     }
 
     private void logTime(long nanoseconds) {
