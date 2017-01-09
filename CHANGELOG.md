@@ -1,3 +1,7 @@
+## 0.1.6(2017-01-09)
+
+- Fix possible ConcurrentModificationException ([aa452ca](aa452ca50a293510f2ca5a2a7f2aee0081b1dfd9))
+
 ## 0.1.5(2016-12-18)
 
 - Remove unncessary synchronized methods ([6c0da78](6c0da78dad4c48628af1fa1cfbcbad8df7b8721f))
