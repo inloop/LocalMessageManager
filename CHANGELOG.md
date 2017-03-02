@@ -1,3 +1,7 @@
+## 0.1.7(2017-03-02)
+
+- Fix temporary leak ([878278b](878278b4eafe5353a0ad29048f41632ffdd99563))
+
 ## 0.1.6(2017-01-09)
 
 - Fix possible ConcurrentModificationException ([aa452ca](aa452ca50a293510f2ca5a2a7f2aee0081b1dfd9))
