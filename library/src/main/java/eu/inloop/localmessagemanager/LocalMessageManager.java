@@ -246,6 +246,8 @@ public class LocalMessageManager implements Callback {
             for (final LocalMessageCallback callback : mDefensiveCopyList) {
                 callback.handleMessage(mMessage);
             }
+            // leave the list empty - prevent leaks
+            mDefensiveCopyList.clear();
         }
 
         mMessage.setMessage(null);
